@@ -50,6 +50,21 @@ It offers secure JWT-based access & refresh token generation, device-level sessi
 ```python
 from token_services import create_access_token, create_refresh_token, token_control
 ```
+### ✅ Save To deviceID
+```js
+fetch('/set_cookie', {
+  method: 'GET',
+  credentials: 'include' 
+})
+.then(response => response.json())
+.then(data => {
+  console.log("Response:", data);
+})
+.catch(error => {
+  console.error("An error occurred:", error);
+});
+
+```
 
 ### ✅ Create Access Token
 ```python
