@@ -121,6 +121,8 @@ token_services/
 ├── config.py                   # Secret keys & constants
 ├── requirements.py             # Requirements
 ├── set_cookie.py               # deviceID function
+├── before_request.py           # before_request API endpoint
+
 
 ```
 
