@@ -31,7 +31,7 @@ It offers secure JWT-based access & refresh token generation, device-level sessi
 ## 🧠 How It Works
 
 ### Token Generation:
-- Access Token → Valid for X minutes  
+- Access Token → Valid for 60 minutes  
 - Refresh Token → Valid for 30 days (daily reset at 04:00 AM)
 
 ### Token Control Flow:
@@ -62,18 +62,23 @@ save_refresh_token_to_db(email)
 ```
 
 ### 🔍 Token Validation
+
 ```python
-result = token_control()
-if result['valid']:
-    # Allow access
-else:
-    # Deny request
+@app.route('/access_token_validate', methods=['POST'])
+def access_token_validate():
+    result = token_control()
+    if result['valid']:
+        return jsonify({
+            'valid': True,
+            'user_type': result['user_type'],
+            'token': result['token']
+        }), 200
+    return jsonify({'valid': False, 'message': result['error_code']}), result['code']
 ```
 
 ---
 
 ## 🛠️ Dependencies
-
 - Flask
 - PyJWT
 - cryptography (Fernet)
@@ -99,29 +104,14 @@ token_services/
 ├── token_encryption.py         # Fernet-based encryption logic
 ├── db.py                       # MySQL DB connection
 ├── config.py                   # Secret keys & constants
+├── requirements.py             # Requirements
+├── set_cookie.py               # deviceID function
+
 ```
 
----
-
-## 🧪 Test Route Example
-
-```python
-@access_token_validate_bp.route('/access_token_validate', methods=['POST'])
-def access_token_validate():
-    result = token_control()
-    if result['valid']:
-        return jsonify({
-            'valid': True,
-            'user_type': result['user_type'],
-            'token': result['token']
-        }), 200
-    return jsonify({'valid': False, 'message': result['error_code']}), result['code']
-```
-
----
 
 ## 👨‍💻 Developer: TOLGA ERSOY
 
 🎓 Pamukkale University – Computer Engineering | Full Stack Developer  
 
----
+
