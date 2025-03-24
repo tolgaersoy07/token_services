@@ -77,7 +77,7 @@ save_refresh_token_to_db(email)
 ```
 
 ### 🔍 Token Validation
-
+#### /acces_Token_validate
 ```python
 @app.route('/access_token_validate', methods=['POST'])
 def access_token_validate():
@@ -89,6 +89,30 @@ def access_token_validate():
             'token': result['token']
         }), 200
     return jsonify({'valid': False, 'message': result['error_code']}), result['code']
+```
+
+#### /before_request
+```python
+
+@app.before_request
+def before_request():
+    if request.endpoint is None:
+        return render_template('404.html')
+    if request.path=="/":
+        return None
+    for item in OUT_LIST:
+        if item in request.path:
+            return None
+
+    result=token_control()
+    if result['valid']:
+        user_type=get_user_type(get_email_from_token("Bearer "+result['token']))
+        if (user_type=="user" and "admin" in request.path) or (user_type=="admin" and "admin" not in request.path):
+            return render_template('403.html')
+        return None
+
+    return render_template('400.html')
+
 ```
 
 ---
